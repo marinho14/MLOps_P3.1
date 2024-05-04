@@ -282,15 +282,15 @@ services:
         - AWS_SECRET_ACCESS_KEY=supersecret # ${AWS_SECRET_ACCESS_KEY}
     command: mlflow server --backend-store-uri postgresql://airflow:airflow@postgres:5432/mlflow --default-artifact-root s3://mlflow/ --host 0.0.0.0
   
-  # fastapi:
-  #   build:
-  #     context: .
-  #     dockerfile: inference/inference.Dockerfile
-  #   ports:
-  #     - "8088:8000"
-  #   volumes:
-  #     - ${AIRFLOW_PROJ_DIR:-.}/models:/opt/airflow/models
-  #     - ${AIRFLOW_PROJ_DIR:-.}/encoders:/opt/airflow/encoders
+  fastapi:
+    build:
+      context: .
+      dockerfile: inference/inference.Dockerfile
+    ports:
+      - "8088:8000"
+    volumes:
+      - ${AIRFLOW_PROJ_DIR:-.}/models:/opt/airflow/models
+      - ${AIRFLOW_PROJ_DIR:-.}/encoders:/opt/airflow/encoders
 
   pgadmin:
     image: dpage/pgadmin4
@@ -307,14 +307,24 @@ services:
     volumes:
       - ./pgadmin/data/:/var/lib/pgadmin
 
-  # jupyter:
-  #   build:
-  #     context: .
-  #     dockerfile: myjupyter/jupyter.dockerfile
-  #   ports:
-  #     - 8888:8888
-  #   volumes:
-  #     - ./myjupyter:/work
+  jupyter:
+    build:
+      context: .
+      dockerfile: myjupyter/jupyter.dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - ./myjupyter:/work
+
+  streamlit:
+    build:
+      context: ./streamlit
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./streamlit:/app
+    command: streamlit run --server.port 8082 app.py
       
 volumes:
   postgres-db-volume:
