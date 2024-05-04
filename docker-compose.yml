@@ -307,14 +307,14 @@ services:
     volumes:
       - ./pgadmin/data/:/var/lib/pgadmin
 
-  jupyter:
-    build:
-      context: .
-      dockerfile: myjupyter/jupyter.dockerfile
-    ports:
-      - 8888:8888
-    volumes:
-      - ./myjupyter:/work
+  # jupyter:
+  #   build:
+  #     context: .
+  #     dockerfile: myjupyter/jupyter.dockerfile
+  #   ports:
+  #     - 8888:8888
+  #   volumes:
+  #     - ./myjupyter:/work
       
 volumes:
   postgres-db-volume:
